@@ -1,4 +1,5 @@
-﻿**Source of truth:** _Zashboard V1 Living Spec And Checklist.pdf_
+# Zashboard V1 Spec (Working Copy)
+**Source of truth:** _Zashboard V1 Living Spec And Checklist.pdf_
 **This file:** a concise, working spec kept in sync with the PDF.
 ## Vision
 Define one dashboard spec and build **three targets** from it:
