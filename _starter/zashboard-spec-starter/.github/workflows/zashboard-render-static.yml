@@ -1,0 +1,22 @@
+name: zashboard-render-static
+on:
+  schedule:
+    - cron: '0 * * * *'  # hourly
+  workflow_dispatch: {}
+jobs:
+  render:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: r-lib/actions/setup-r@v2
+      - name: Install deps
+        run: Rscript -e "install.packages(c('arrow','duckdb','DBI','odbc','jsonlite'))"
+      - name: Build data and site
+        run: Rscript scripts/build_static.R
+      - name: Deploy to gh-pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./site

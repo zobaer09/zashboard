@@ -1,0 +1,23 @@
+# Minimal example spec
+datasets:
+  visits:
+    source: parquet
+    path: https://example.com/data/visits/{year}/{month}.parquet
+    key: visits
+filters:
+  - name: Borough
+    field: borough
+  - name: Month
+    field: month
+charts:
+  - id: visits_by_borough
+    title: Visits by borough
+    query: |
+      select borough, count(*) as n
+      from visits
+      where month between :Month.start and :Month.end
+      group by borough
+    type: bar
+layout:
+  - row:
+      - chart: visits_by_borough
