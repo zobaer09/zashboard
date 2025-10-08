@@ -10,3 +10,12 @@
 ^\.github$
 ^_pkgdown\.yml$
 ^pkgdown$
+^CHECKLIST\.md$
+^SPEC\.md$
+^CODE_OF_CONDUCT\.md$
+^CONTRIBUTING\.md$
+^SECURITY\.md$
+^www$
+^zashboard-spec-starter\.zip$
+^ci-logs$
+

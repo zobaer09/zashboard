@@ -12,12 +12,13 @@ Build dashboards from a single spec to static HTML, Shiny, or Shinylive.
 Useful links:
 \itemize{
   \item \url{https://github.com/zobaer09/zashboard}
+  \item \url{https://zobaer09.github.io/zashboard/}
   \item Report bugs at \url{https://github.com/zobaer09/zashboard/issues}
 }
 
 }
 \author{
-\strong{Maintainer}: First Last \email{first.last@example.com}
+\strong{Maintainer}: Zobaer Ahmed \email{zobaer09@users.noreply.github.com}
 
 }
 \keyword{internal}

@@ -1,0 +1,18 @@
+checking CRAN incoming feasibility ... NOTE
+Maintainer: 'Zobaer Ahmed <zobaer09@users.noreply.github.com>'
+
+New submission
+
+Version contains large components (0.0.0.9000)
+
+Package has a VignetteBuilder field but no prebuilt vignette index.
+
+Found the following (possibly) invalid URLs:
+  URL: https://zobaer09.github.io/zashboard/
+    From: DESCRIPTION
+          man/zashboard-package.Rd
+    Status: 404
+    Message: Not Found
+
+The Description field should not start with the package name,
+  'This package' or similar.
