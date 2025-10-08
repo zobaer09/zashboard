@@ -1,0 +1,22 @@
+# RStudio
+.Rproj.user/
+.Rhistory
+.RData
+.Ruserdata
+
+# renv local libs and staging
+renv/library/
+renv/staging/
+
+# OS cruft
+.DS_Store
+Thumbs.db
+
+# Build artifacts
+*.Rcheck/
+.vscode/
+.idea/
+
+# pkgdown/site output (will add later)
+docs/
+site/
