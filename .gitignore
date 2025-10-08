@@ -20,3 +20,5 @@ Thumbs.db
 # pkgdown/site output (will add later)
 docs/
 site/
+.Rproj.user
+docs

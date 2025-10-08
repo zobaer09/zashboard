@@ -1,0 +1,30 @@
+Package: zashboard
+Title: Build Dashboards from One Spec as Static HTML, Shiny, or Shinylive
+Version: 0.0.0.9000
+Authors@R: 
+    person("First", "Last", , "first.last@example.com", role = c("aut", "cre"))
+Description: Zashboard lets you define a single dashboard spec and build it into three targets: static HTML, a Shiny app, or a Shinylive app. It includes light semantics for measures and relationships, supports cross-filtering in Shiny and safe interactivity in static builds, theming with 'bslib', and data sources via DuckDB/Arrow or Microsoft SQL Server (DBI/ODBC).
+License: MIT + file LICENSE
+Encoding: UTF-8
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.3.2
+URL: https://github.com/zobaer09/zashboard, https://zobaer09.github.io/zashboard/
+BugReports: https://github.com/zobaer09/zashboard/issues
+Imports: 
+    arrow,
+    bslib,
+    cli,
+    DBI,
+    duckdb,
+    htmltools,
+    shiny,
+    tibble,
+    yaml
+Suggests: 
+    knitr,
+    pkgdown,
+    rmarkdown,
+    testthat (>= 3.0.0)
+Config/testthat/edition: 3
+Depends: R (>= 4.3)
+VignetteBuilder: knitr

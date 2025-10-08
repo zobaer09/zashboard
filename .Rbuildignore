@@ -1,0 +1,12 @@
+^renv$
+^renv\.lock$
+^zashboard\.Rproj$
+^\.Rproj\.user$
+^LICENSE\.md$
+^_starter$
+^site$
+^docs$
+^scripts$
+^\.github$
+^_pkgdown\.yml$
+^pkgdown$

@@ -25,7 +25,7 @@ Define one dashboard spec and build **three targets** from it:
 > If the ZIP contains additional schema files (e.g., manifest schema), we will add/align them here as they land.
 
 ## High-Level Requirements (V1)
-- **Spec format:** YAML file (`zashboard.yml`) defining:
+- **Spec format:** YAML file (`zashboard.yml`) defining: 
   - data sources (DuckDB/Arrow, SQL Server via DBI/ODBC),
   - datasets (tables, joins/relationships),
   - measures/aggregations,
