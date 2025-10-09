@@ -27,3 +27,5 @@ Suggests:
 Config/testthat/edition: 3
 Depends: R (>= 4.3)
 VignetteBuilder: knitr
+Imports: 
+    yaml
