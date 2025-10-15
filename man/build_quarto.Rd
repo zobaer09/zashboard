@@ -23,34 +23,22 @@ build_quarto(
 )
 }
 \arguments{
-\item{spec}{Character path to a YAML file, or a list. If \code{NULL}, the package
-template is used: \code{system.file("templates","zashboard.yml", package = "zashboard")}.}
+\item{spec}{Path to a YAML file or a list already parsed; if NULL, the
+packaged template is used.}
 
-\item{out_dir}{Directory for the Quarto project. Default:
-\code{file.path(tempdir(), "zashboard-quarto")}.}
+\item{out_dir}{Directory for the Quarto project.}
 
-\item{overwrite}{If \code{FALSE} and \code{out_dir} exists, error. Default \code{FALSE}.}
+\item{overwrite}{Logical; if TRUE, allow writing into an existing out_dir.}
 
-\item{title}{Optional page title; defaults to \code{spec$title} or "Zashboard".}
+\item{render}{Logical; if TRUE and Quarto is available, render the site.}
 
-\item{render}{If \code{TRUE} and Quarto is available, render to HTML.}
-
-\item{...}{Reserved for future options.}
+\item{...}{Not used currently; reserved for future extensions.}
 }
 \value{
-(Invisibly) the normalized output directory path.
+(Invisibly) the normalized project directory path.
 }
 \description{
-Reads and validates a Zashboard spec, then scaffolds a minimal Quarto site:
-\itemize{
-\item \verb{_quarto.yml} with page title and basic HTML format
-\item \code{index.qmd} with a tiny summary of charts
-\item \code{app.json} manifest (ids/types) for future client use
-}
-}
-\details{
-If Quarto is installed (via the \code{{quarto}} R package + Quarto CLI), set
-\code{render = TRUE} to render HTML. By default, we only write files (CRAN-fast).
+Writes a minimal Quarto project; optionally renders it if Quarto is available.
 }
 \examples{
 \donttest{

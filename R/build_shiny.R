@@ -1,17 +1,14 @@
-#' Build a Shiny app
+#' Build a Shiny app from the spec
 #'
-#' Reads and validates a Zashboard spec and constructs a minimal Shiny app.
-#' If `{bslib}` is available, a Bootstrap 5 theme is applied; otherwise
-#' a base `fluidPage()` is used. The app is returned (not launched).
+#' Creates and returns a shiny.appobj without launching it.
 #'
-#' @inheritParams zashboard_read_spec
-#' @param title Optional title for the app window; defaults to `spec$title` or "Zashboard".
-#' @param theme Optional bslib theme object. If `NULL` and `{bslib}` is installed,
-#'   a default `bslib::bs_theme()` is used.
-#' @param launch Logical; if `TRUE`, calls `shiny::runApp(app)`; default `FALSE`.
-#' @param ... Reserved for future options.
-#' @return A `shiny.appobj`. If `launch = TRUE`, the app is run and its return value is passed through.
+#' @param spec Path to a YAML file or a list already parsed; if NULL, the
+#'   packaged template is used.
+#' @param launch Logical; if TRUE, run the app after creation (defaults FALSE).
+#' @param ... Not used currently; reserved for future extensions.
+#' @return A shiny.appobj.
 #' @export
+
 #' @examples
 #' \donttest{
 #' app <- build_shiny()  # returns a shiny.appobj

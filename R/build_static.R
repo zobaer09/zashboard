@@ -1,15 +1,18 @@
 #' Build static HTML output
 #'
-#' Reads and validates a Zashboard spec, then writes a minimal `index.html`
+#' Reads and validates a Zashboard spec, then writes a minimal index.html
 #' to the output directory and copies package assets (CSS/JS) if present.
 #'
-#' @inheritParams zashboard_read_spec
+#' @param spec Path to a YAML file or a list already parsed; if NULL, the
+#'   packaged template is used.
 #' @param out_dir Directory to write the site into. Defaults to
-#'   `file.path(tempdir(), "zashboard-static")`.
-#' @param overwrite Logical; if `FALSE` (default) and `out_dir` exists, error.
-#' @param title Optional page title override; defaults to `spec$title` or "Zashboard".
+#'   file.path(tempdir(), "zashboard-static").
+#' @param overwrite Logical; if FALSE (default) and out_dir exists, error.
+#' @param title Optional page title override; defaults to spec$title or "Zashboard".
+#' @param ... Not used currently; reserved for future extensions.
 #' @return (Invisibly) the normalized output directory path.
 #' @export
+
 build_static <- function(spec = NULL, out_dir = NULL, overwrite = FALSE, title = NULL, ...) {
   `%||%` <- function(x, y) if (is.null(x) || length(x) == 0L) y else x
   

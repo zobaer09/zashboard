@@ -2,7 +2,8 @@
 % Please edit documentation in R/errors.R
 \name{zashboard_abort}
 \alias{zashboard_abort}
-\title{Internal: pretty abort with bullet points}
+\title{If the cli package is installed, uses cli::cli_abort with bullets; otherwise
+falls back to stop() with a joined message.}
 \usage{
 zashboard_abort(errors, prefix = "Validation failed")
 }
@@ -12,6 +13,7 @@ zashboard_abort(errors, prefix = "Validation failed")
 \item{prefix}{Prefix line for the error header.}
 }
 \description{
-If {cli} is installed, use cli_abort with bullets; otherwise stop() with a joined message.
+If the cli package is installed, uses cli::cli_abort with bullets; otherwise
+falls back to stop() with a joined message.
 }
 \keyword{internal}

@@ -1,6 +1,6 @@
-#' Internal: pretty abort with bullet points
-#'
-#' If {cli} is installed, use cli_abort with bullets; otherwise stop() with a joined message.
+#' If the cli package is installed, uses cli::cli_abort with bullets; otherwise
+#' falls back to stop() with a joined message.
+
 #' @param errors Character vector of error messages.
 #' @param prefix Prefix line for the error header.
 #' @keywords internal

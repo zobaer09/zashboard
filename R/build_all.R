@@ -1,20 +1,21 @@
 #' Build all Zashboard targets at once
 #'
-#' Runs \code{build_static()}, \code{build_shiny()}, \code{build_shinylive()},
-#' and \code{build_quarto()} and returns their outputs in a named list.
+#' Runs build_static(), build_shiny(), build_shinylive(), and build_quarto()
+#' and returns their outputs in a named list.
 #'
-#' @param overwrite Logical; pass to builders to allow reusing their default dirs.
-#' @param render_quarto Logical; if \code{TRUE}, try to render the Quarto site
-#'   (will only render when both {quarto} R pkg and Quarto CLI are available).
-#'   Default \code{FALSE} to keep CRAN and CI fast.
-#' @return A named list with elements:
-#'   \itemize{
-#'     \item{\code{static_dir}}{ Path to static HTML output directory.}
-#'     \item{\code{shinylive_dir}}{ Path to Shinylive output directory.}
-#'     \item{\code{quarto_dir}}{ Path to Quarto project directory.}
-#'     \item{\code{shiny_app}}{ A \code{shiny.appobj}.}
-#'   }
+#' @param overwrite Logical; passed to the builders. Default TRUE.
+#' @param render_quarto Logical; if TRUE, try to render the Quarto site
+#'   (only when both the quarto R package and the Quarto CLI are available).
+#'   Default FALSE to keep CRAN and CI fast.
+#' @return A named list with elements described below.
+#' \describe{
+#'   \item{static_dir}{Path to the static HTML output directory.}
+#'   \item{shinylive_dir}{Path to the Shinylive output directory.}
+#'   \item{quarto_dir}{Path to the Quarto project directory.}
+#'   \item{shiny_app}{A shiny.appobj returned by build_shiny().}
+#' }
 #' @export
+
 build_all <- function(overwrite = TRUE, render_quarto = FALSE) {
   static_dir    <- build_static(overwrite = overwrite)
   shiny_app     <- build_shiny(launch = FALSE)

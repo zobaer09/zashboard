@@ -12,12 +12,10 @@ The Description field should not start with the package name,
 
 ---
 
-checking for future file timestamps ... NOTE
-unable to verify current time
-
----
-
-checking DESCRIPTION meta-information ... NOTE
-Package listed in more than one of Depends, Imports, Suggests, Enhances:
-  'yaml'
-A package should be listed in only one of these fields.
+checking R code for possible problems ... NOTE
+zashboard_abort: no visible global function definition for 'setNames'
+Undefined global functions or variables:
+  setNames
+Consider adding
+  importFrom("stats", "setNames")
+to your NAMESPACE file.

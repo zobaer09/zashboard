@@ -60,6 +60,8 @@ zashboard_connect_arrow <- function(path) {
 #' @param dsn Optional ODBC DSN name.
 #' @param connection_string Optional full connection string (e.g., "Driver={ODBC Driver 18 for SQL Server};Server=...").
 #' @param ... Additional fields passed to \code{DBI::dbConnect()} (e.g., \code{UID}, \code{PWD}, \code{Database}).
+#' @param connection_string Optional full connection string, e.g.
+#'   \verb{Driver={ODBC Driver 18 for SQL Server};Server=SERVER;Database=DB;Trusted_Connection=Yes;}
 #' @return A zashboard connection object if successful.
 #' @export
 zashboard_connect_mssql <- function(dsn = NULL, connection_string = NULL, ...) {

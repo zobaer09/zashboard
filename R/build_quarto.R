@@ -1,22 +1,16 @@
-#' Build a Quarto project for the dashboard
+#' Build a Quarto site (from the spec)
 #'
-#' Reads and validates a Zashboard spec, then scaffolds a minimal Quarto site:
-#' - `_quarto.yml` with page title and basic HTML format
-#' - `index.qmd` with a tiny summary of charts
-#' - `app.json` manifest (ids/types) for future client use
+#' Writes a minimal Quarto project; optionally renders it if Quarto is available.
 #'
-#' If Quarto is installed (via the `{quarto}` R package + Quarto CLI), set
-#' `render = TRUE` to render HTML. By default, we only write files (CRAN-fast).
-#'
-#' @inheritParams zashboard_read_spec
-#' @param out_dir Directory for the Quarto project. Default:
-#'   `file.path(tempdir(), "zashboard-quarto")`.
-#' @param overwrite If `FALSE` and `out_dir` exists, error. Default `FALSE`.
-#' @param title Optional page title; defaults to `spec$title` or "Zashboard".
-#' @param render If `TRUE` and Quarto is available, render to HTML.
-#' @param ... Reserved for future options.
-#' @return (Invisibly) the normalized output directory path.
+#' @param spec Path to a YAML file or a list already parsed; if NULL, the
+#'   packaged template is used.
+#' @param out_dir Directory for the Quarto project.
+#' @param render Logical; if TRUE and Quarto is available, render the site.
+#' @param overwrite Logical; if TRUE, allow writing into an existing out_dir.
+#' @param ... Not used currently; reserved for future extensions.
+#' @return (Invisibly) the normalized project directory path.
 #' @export
+
 #' @examples
 #' \donttest{
 #' dir_out <- build_quarto(overwrite = TRUE)

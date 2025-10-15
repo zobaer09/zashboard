@@ -21,30 +21,20 @@ build_shinylive(
 )
 }
 \arguments{
-\item{spec}{Character path to a YAML file, or a list. If \code{NULL}, the package
-template is used: \code{system.file("templates","zashboard.yml", package = "zashboard")}.}
+\item{spec}{Path to a YAML file or a list already parsed; if NULL, the
+packaged template is used.}
 
-\item{out_dir}{Directory to write the app into. Defaults to
-\code{file.path(tempdir(), "zashboard-shinylive")}.}
+\item{out_dir}{Output directory for the Shinylive bundle.}
 
-\item{overwrite}{Logical; if \code{FALSE} (default) and \code{out_dir} exists, error.}
+\item{overwrite}{Logical; if TRUE, allow writing into an existing out_dir.}
 
-\item{title}{Optional title override; defaults to \code{spec$title} or "Zashboard".}
+\item{...}{Not used currently; reserved for future extensions.}
 }
 \value{
 (Invisibly) the normalized output directory path.
 }
 \description{
-Reads and validates a Zashboard spec, then writes a minimal Shinylive-like
-directory that contains:
-\itemize{
-\item \code{index.html}: a placeholder HTML shell
-\item \code{app.json}: a tiny manifest with title and chart ids/types
-}
-}
-\details{
-This does \strong{not} bundle web assembly or run any external tooling yet.
-It's a safe skeleton you can host or extend in later tasks.
+Produces a browser-executed Shiny app using Shinylive.
 }
 \examples{
 \donttest{

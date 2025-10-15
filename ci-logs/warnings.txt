@@ -1,0 +1,15 @@
+checking Rd \usage sections ... WARNING
+Undocumented arguments in documentation object 'build_quarto'
+  'title'
+
+Undocumented arguments in documentation object 'build_shiny'
+  'title' 'theme'
+
+Undocumented arguments in documentation object 'build_shinylive'
+  'title'
+
+Functions with \usage entries need to have the appropriate \alias
+entries, and all their arguments documented.
+The \usage entries must correspond to syntactically valid R code.
+See chapter 'Writing R documentation files' in the 'Writing R
+Extensions' manual.

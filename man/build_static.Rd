@@ -9,19 +9,22 @@ build_static(spec = NULL, out_dir = NULL, overwrite = FALSE, title = NULL, ...)
 build_static(spec = NULL, out_dir = NULL, overwrite = FALSE, title = NULL, ...)
 }
 \arguments{
-\item{spec}{Path or object}
+\item{spec}{Path to a YAML file or a list already parsed; if NULL, the
+packaged template is used.}
 
 \item{out_dir}{Directory to write the site into. Defaults to
-\code{file.path(tempdir(), "zashboard-static")}.}
+file.path(tempdir(), "zashboard-static").}
 
-\item{overwrite}{Logical; if \code{FALSE} (default) and \code{out_dir} exists, error.}
+\item{overwrite}{Logical; if FALSE (default) and out_dir exists, error.}
 
-\item{title}{Optional page title override; defaults to \code{spec$title} or "Zashboard".}
+\item{title}{Optional page title override; defaults to spec$title or "Zashboard".}
+
+\item{...}{Not used currently; reserved for future extensions.}
 }
 \value{
 (Invisibly) the normalized output directory path.
 }
 \description{
-Reads and validates a Zashboard spec, then writes a minimal \code{index.html}
+Reads and validates a Zashboard spec, then writes a minimal index.html
 to the output directory and copies package assets (CSS/JS) if present.
 }
