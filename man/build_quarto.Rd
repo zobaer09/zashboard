@@ -4,17 +4,58 @@
 \alias{build_quarto}
 \title{Build Quarto}
 \usage{
-build_quarto(spec = NULL, ...)
+build_quarto(
+  spec = NULL,
+  out_dir = NULL,
+  overwrite = FALSE,
+  title = NULL,
+  render = FALSE,
+  ...
+)
 
-build_quarto(spec = NULL, ...)
+build_quarto(
+  spec = NULL,
+  out_dir = NULL,
+  overwrite = FALSE,
+  title = NULL,
+  render = FALSE,
+  ...
+)
 }
 \arguments{
-\item{spec}{Path to a YAML spec (e.g., 'inst/templates/zashboard.yml') or a list-like spec already parsed. Defaults to NULL.}
+\item{spec}{Character path to a YAML file, or a list. If \code{NULL}, the package
+template is used: \code{system.file("templates","zashboard.yml", package = "zashboard")}.}
 
-\item{...}{Additional options passed to the Quarto builder.}
+\item{out_dir}{Directory for the Quarto project. Default:
+\code{file.path(tempdir(), "zashboard-quarto")}.}
+
+\item{overwrite}{If \code{FALSE} and \code{out_dir} exists, error. Default \code{FALSE}.}
+
+\item{title}{Optional page title; defaults to \code{spec$title} or "Zashboard".}
+
+\item{render}{If \code{TRUE} and Quarto is available, render to HTML.}
+
+\item{...}{Reserved for future options.}
+}
+\value{
+(Invisibly) the normalized output directory path.
 }
 \description{
-Build Quarto
-
-Build a Quarto site for the dashboard
+Reads and validates a Zashboard spec, then scaffolds a minimal Quarto site:
+\itemize{
+\item \verb{_quarto.yml} with page title and basic HTML format
+\item \code{index.qmd} with a tiny summary of charts
+\item \code{app.json} manifest (ids/types) for future client use
+}
+}
+\details{
+If Quarto is installed (via the \code{{quarto}} R package + Quarto CLI), set
+\code{render = TRUE} to render HTML. By default, we only write files (CRAN-fast).
+}
+\examples{
+\donttest{
+dir_out <- build_quarto(overwrite = TRUE)
+file.exists(file.path(dir_out, "_quarto.yml"))
+file.exists(file.path(dir_out, "index.qmd"))
+}
 }

@@ -7,12 +7,17 @@ Version contains large components (0.0.0.9000)
 
 Package has a VignetteBuilder field but no prebuilt vignette index.
 
-Found the following (possibly) invalid URLs:
-  URL: https://zobaer09.github.io/zashboard/
-    From: DESCRIPTION
-          man/zashboard-package.Rd
-    Status: 404
-    Message: Not Found
-
 The Description field should not start with the package name,
   'This package' or similar.
+
+---
+
+checking for future file timestamps ... NOTE
+unable to verify current time
+
+---
+
+checking DESCRIPTION meta-information ... NOTE
+Package listed in more than one of Depends, Imports, Suggests, Enhances:
+  'yaml'
+A package should be listed in only one of these fields.

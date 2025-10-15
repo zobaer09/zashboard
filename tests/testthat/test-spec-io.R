@@ -20,3 +20,15 @@ test_that("invalid spec is rejected with helpful message", {
   expect_error(zashboard_validate_spec(bad), "charts", fixed = FALSE)
 })
 
+
+test_that("read+validate wrapper returns a list", {
+  sp <- zashboard_read_validate()  # defaults to the installed template
+  expect_type(sp, "list")
+  expect_true(all(c("datasets","charts","layout") %in% names(sp)))
+})
+
+test_that("read+validate fails when a key is missing", {
+  tpl <- zashboard_read_spec()
+  tpl$charts <- NULL  # remove a required field intentionally
+  expect_error(zashboard_validate_spec(tpl), "charts")
+})

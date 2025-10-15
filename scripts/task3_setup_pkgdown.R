@@ -23,7 +23,7 @@ d <- desc::desc(file = "DESCRIPTION")
 d$set("Package", "zashboard")
 d$set("Title", "Build Dashboards from One Spec as Static HTML, Shiny, or Shinylive")
 d$set("Description", paste0(
-  "Zashboard lets you define a single dashboard spec and build it into three targets: ",
+  "Zashboard lets you define a single dashboard spec and build it into four targets: ",
   "static HTML, a Shiny app, or a Shinylive app. It includes light semantics for measures ",
   "and relationships, supports cross-filtering in Shiny and safe interactivity in static builds, ",
   "theming with 'bslib', and data sources via DuckDB/Arrow or Microsoft SQL Server (DBI/ODBC)."

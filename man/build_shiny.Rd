@@ -4,17 +4,34 @@
 \alias{build_shiny}
 \title{Build Shiny app}
 \usage{
-build_shiny(spec = NULL, ...)
+build_shiny(spec = NULL, title = NULL, theme = NULL, launch = FALSE, ...)
 
-build_shiny(spec = NULL, ...)
+build_shiny(spec = NULL, title = NULL, theme = NULL, launch = FALSE, ...)
 }
 \arguments{
-\item{spec}{Path to a YAML spec (e.g., 'inst/templates/zashboard.yml') or a list-like spec already parsed. Defaults to NULL.}
+\item{spec}{Character path to a YAML file, or a list. If \code{NULL}, the package
+template is used: \code{system.file("templates","zashboard.yml", package = "zashboard")}.}
 
-\item{...}{Additional options passed to the Shiny builder.}
+\item{title}{Optional title for the app window; defaults to \code{spec$title} or "Zashboard".}
+
+\item{theme}{Optional bslib theme object. If \code{NULL} and \code{{bslib}} is installed,
+a default \code{bslib::bs_theme()} is used.}
+
+\item{launch}{Logical; if \code{TRUE}, calls \code{shiny::runApp(app)}; default \code{FALSE}.}
+
+\item{...}{Reserved for future options.}
+}
+\value{
+A \code{shiny.appobj}. If \code{launch = TRUE}, the app is run and its return value is passed through.
 }
 \description{
-Build Shiny app
-
-Build a Shiny app
+Reads and validates a Zashboard spec and constructs a minimal Shiny app.
+If \code{{bslib}} is available, a Bootstrap 5 theme is applied; otherwise
+a base \code{fluidPage()} is used. The app is returned (not launched).
+}
+\examples{
+\donttest{
+app <- build_shiny()  # returns a shiny.appobj
+# shiny::runApp(app)  # (not run)
+}
 }

@@ -4,17 +4,52 @@
 \alias{build_shinylive}
 \title{Build Shinylive app}
 \usage{
-build_shinylive(spec = NULL, ...)
+build_shinylive(
+  spec = NULL,
+  out_dir = NULL,
+  overwrite = FALSE,
+  title = NULL,
+  ...
+)
 
-build_shinylive(spec = NULL, ...)
+build_shinylive(
+  spec = NULL,
+  out_dir = NULL,
+  overwrite = FALSE,
+  title = NULL,
+  ...
+)
 }
 \arguments{
-\item{spec}{Path to a YAML spec (e.g., 'inst/templates/zashboard.yml') or a list-like spec already parsed. Defaults to NULL.}
+\item{spec}{Character path to a YAML file, or a list. If \code{NULL}, the package
+template is used: \code{system.file("templates","zashboard.yml", package = "zashboard")}.}
 
-\item{...}{Additional options passed to the Shinylive builder.}
+\item{out_dir}{Directory to write the app into. Defaults to
+\code{file.path(tempdir(), "zashboard-shinylive")}.}
+
+\item{overwrite}{Logical; if \code{FALSE} (default) and \code{out_dir} exists, error.}
+
+\item{title}{Optional title override; defaults to \code{spec$title} or "Zashboard".}
+}
+\value{
+(Invisibly) the normalized output directory path.
 }
 \description{
-Build Shinylive app
-
-Build a Shinylive app
+Reads and validates a Zashboard spec, then writes a minimal Shinylive-like
+directory that contains:
+\itemize{
+\item \code{index.html}: a placeholder HTML shell
+\item \code{app.json}: a tiny manifest with title and chart ids/types
+}
+}
+\details{
+This does \strong{not} bundle web assembly or run any external tooling yet.
+It's a safe skeleton you can host or extend in later tasks.
+}
+\examples{
+\donttest{
+dir_out <- build_shinylive(overwrite = TRUE)
+file.exists(file.path(dir_out, "index.html"))
+file.exists(file.path(dir_out, "app.json"))
+}
 }

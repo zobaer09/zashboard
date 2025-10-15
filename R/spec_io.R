@@ -81,3 +81,67 @@ zashboard_validate_spec <- function(spec) {
   
   invisible(spec)
 }
+
+# ---- helpers & convenience ----------------------------------------------------
+
+#' Assert required top-level fields exist in a spec
+#'
+#' Internal helper to produce a clear message if required fields are missing.
+#' @param spec A list-like spec.
+#' @param required Character vector of required top-level names.
+#' @keywords internal
+zashboard_assert_spec <- function(spec, required) {
+  if (!is.list(spec)) stop("`spec` must be a list.", call. = FALSE)
+  miss <- setdiff(required, names(spec))
+  if (length(miss)) {
+    stop("Spec is missing required field(s): ", paste(miss, collapse = ", "), call. = FALSE)
+  }
+  invisible(spec)
+}
+
+#' Read and validate a Zashboard spec
+#'
+#' Convenience wrapper: reads a YAML/list spec via [zashboard_read_spec()],
+#' then validates it via [zashboard_validate_spec()]. Returns the validated spec.
+#'
+#' @inheritParams zashboard_read_spec
+#' @return The validated spec (list).
+#' @export
+zashboard_read_validate <- function(spec = NULL) {
+  sp <- zashboard_read_spec(spec)
+  # quick top-level presence check before deeper validation
+  zashboard_assert_spec(sp, c("datasets", "charts", "layout"))
+  zashboard_validate_spec(sp)
+}
+
+#' Validate a Zashboard spec (v1)
+#' @param spec A list-like spec.
+#' @return Invisibly returns `spec` if valid; otherwise throws an error.
+#' @export
+zashboard_validate_spec <- function(spec) {
+  `%||%` <- function(x, y) if (is.null(x) || length(x) == 0L) y else x
+  if (!is.list(spec)) zashboard_abort("`spec` must be a list", "Spec validation failed")
+  
+  errs <- character()
+  
+  # required top-level fields
+  req <- c("datasets", "charts", "layout")
+  miss <- setdiff(req, names(spec))
+  if (length(miss)) errs <- c(errs, paste0("missing required field(s): ", paste(miss, collapse = ", ")))
+  
+  # charts shape (if present)
+  if (!is.null(spec$charts)) {
+    if (!is.list(spec$charts) || length(spec$charts) == 0L) {
+      errs <- c(errs, "charts must be a non-empty list")
+    } else {
+      for (i in seq_along(spec$charts)) {
+        ch <- spec$charts[[i]]
+        if (is.null(ch$id)   || !nzchar(as.character(ch$id   %||% ""))) errs <- c(errs, paste0("charts[[", i, "]] has empty 'id'"))
+        if (is.null(ch$type) || !nzchar(as.character(ch$type %||% ""))) errs <- c(errs, paste0("charts[[", i, "]] has empty 'type'"))
+      }
+    }
+  }
+  
+  if (length(errs)) zashboard_abort(errs, "Spec validation failed")
+  invisible(spec)
+}

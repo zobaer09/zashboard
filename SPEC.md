@@ -1,11 +1,15 @@
 # Zashboard V1 Spec (Working Copy)
 **Source of truth:** _Zashboard V1 Living Spec And Checklist.pdf_
 **This file:** a concise, working spec kept in sync with the PDF.
+
 ## Vision
-Define one dashboard spec and build **three targets** from it:
+
+Define one dashboard spec and build **four** targets from it:
+
 1) **Static HTML** (safe interactivity for offline hosting)  
 2) **Shiny app** (full interactivity, cross-filtering)  
-3) **Shinylive app** (browser-executed Shiny via WebAssembly)
+3) **Shinylive app** (browser-executed Shiny via WebAssembly)  
+4) **Quarto site** (literate site wrapper + docs around the dashboard; uses the same spec)
 
 ## Core Principles
 - **One spec** drives all outputs (no forked authoring).
@@ -35,6 +39,7 @@ Define one dashboard spec and build **three targets** from it:
   - **Static HTML:** pre-aggregated data artifacts, safe client interactions (no server).
   - **Shiny:** server-backed cross-filtering and drill behaviors.
   - **Shinylive:** Shiny in the browser, honoring the same spec.
+  - **Quarto:** site wrapper + docs; renders to `_site/` locally and `docs/` on CI for Pages.
 - **Theming:** a single theme map (bslib) applied consistently.
 - **Caching & performance:** local DuckDB/Arrow caching; pushdown to SQL Server where appropriate.
 - **Accessibility:** sensible aria labels, color-contrast defaults, keyboard navigability for core components.
