@@ -6,6 +6,7 @@
 #'   packaged template is used.
 #' @param out_dir Output directory for the Shinylive bundle.
 #' @param overwrite Logical; if TRUE, allow writing into an existing out_dir.
+#' @param title Optional page title; defaults to spec$title or "Zashboard".
 #' @param ... Not used currently; reserved for future extensions.
 #' @return (Invisibly) the normalized output directory path.
 #' @export

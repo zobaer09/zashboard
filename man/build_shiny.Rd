@@ -12,6 +12,10 @@ build_shiny(spec = NULL, title = NULL, theme = NULL, launch = FALSE, ...)
 \item{spec}{Path to a YAML file or a list already parsed; if NULL, the
 packaged template is used.}
 
+\item{title}{Optional app/window title; defaults to spec$title or "Zashboard".}
+
+\item{theme}{Optional bslib theme object; if NULL, uses zashboard_theme().}
+
 \item{launch}{Logical; if TRUE, run the app after creation (defaults FALSE).}
 
 \item{...}{Not used currently; reserved for future extensions.}

@@ -7,6 +7,7 @@
 #' @param out_dir Directory for the Quarto project.
 #' @param render Logical; if TRUE and Quarto is available, render the site.
 #' @param overwrite Logical; if TRUE, allow writing into an existing out_dir.
+#' @param title Optional site title; defaults to spec$title or "Zashboard".
 #' @param ... Not used currently; reserved for future extensions.
 #' @return (Invisibly) the normalized project directory path.
 #' @export

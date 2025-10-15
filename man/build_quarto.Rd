@@ -30,6 +30,8 @@ packaged template is used.}
 
 \item{overwrite}{Logical; if TRUE, allow writing into an existing out_dir.}
 
+\item{title}{Optional site title; defaults to spec$title or "Zashboard".}
+
 \item{render}{Logical; if TRUE and Quarto is available, render the site.}
 
 \item{...}{Not used currently; reserved for future extensions.}

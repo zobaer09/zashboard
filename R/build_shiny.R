@@ -5,6 +5,8 @@
 #' @param spec Path to a YAML file or a list already parsed; if NULL, the
 #'   packaged template is used.
 #' @param launch Logical; if TRUE, run the app after creation (defaults FALSE).
+#' @param title Optional app/window title; defaults to spec$title or "Zashboard".
+#' @param theme Optional bslib theme object; if NULL, uses zashboard_theme().
 #' @param ... Not used currently; reserved for future extensions.
 #' @return A shiny.appobj.
 #' @export

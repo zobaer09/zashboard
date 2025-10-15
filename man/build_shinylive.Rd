@@ -28,6 +28,8 @@ packaged template is used.}
 
 \item{overwrite}{Logical; if TRUE, allow writing into an existing out_dir.}
 
+\item{title}{Optional page title; defaults to spec$title or "Zashboard".}
+
 \item{...}{Not used currently; reserved for future extensions.}
 }
 \value{

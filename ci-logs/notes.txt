@@ -9,13 +9,3 @@ Package has a VignetteBuilder field but no prebuilt vignette index.
 
 The Description field should not start with the package name,
   'This package' or similar.
-
----
-
-checking R code for possible problems ... NOTE
-zashboard_abort: no visible global function definition for 'setNames'
-Undefined global functions or variables:
-  setNames
-Consider adding
-  importFrom("stats", "setNames")
-to your NAMESPACE file.

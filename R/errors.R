@@ -7,7 +7,9 @@
 zashboard_abort <- function(errors, prefix = "Validation failed") {
   errs <- unique(as.character(errors))
   if (requireNamespace("cli", quietly = TRUE)) {
-    cli::cli_abort(c(prefix, setNames(errs, rep("x", length(errs)))))
+    nm <- rep("x", length(errs))
+    names(errs) <- nm
+    cli::cli_abort(c(prefix, errs))
   } else {
     msg <- paste0(prefix, ":\n", paste0(" - ", errs, collapse = "\n"))
     stop(msg, call. = FALSE)
