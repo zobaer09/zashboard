@@ -1,5 +1,13 @@
 # Zashboard
 
+<!-- badges: start -->
+[![R-CMD-check](https://github.com/zobaer09/zashboard/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/zobaer09/zashboard/actions/workflows/R-CMD-check.yaml)
+[![lifecycle](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE.md)
+[Docs](https://zobaer09.github.io/zashboard/)
+<!-- badges: end -->
+
+
 [![R-CMD-check](https://github.com/zobaer09/zashboard/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/zobaer09/zashboard/actions/workflows/R-CMD-check.yaml)
 [![pkgdown](https://github.com/zobaer09/zashboard/actions/workflows/pkgdown.yaml/badge.svg)](https://zobaer09.github.io/zashboard/)
 
@@ -25,3 +33,74 @@ Quick check:
 ```r
 sp <- zashboard_read_validate()   # loads the template shipped in the package
 ```
+
+## Quickstart (4 targets with mtcars)
+
+```r
+library(zashboard)
+spec <- system.file('examples/mtcars/mtcars.yml', package = 'zashboard', mustWork = TRUE)
+static_dir <- build_static(spec, overwrite = TRUE)
+sl_dir     <- build_shinylive(spec, overwrite = TRUE)
+qdir       <- file.path(tempdir(), 'zash-mtcars-quarto'); build_quarto(spec, out_dir = qdir, overwrite = TRUE)
+# shiny::runApp(build_shiny(spec))  # run interactively
+``` 
+
+
+## Installation
+
+Zashboard targets OS **Windows 10/11** and **R ≥ 4.3**. Use `renv` (recommended), or install directly:
+
+```r
+# Stable (GitHub):
+if (!requireNamespace("pak", quietly = TRUE)) install.packages("pak")
+pak::pak("zobaer09/zashboard")
+
+# Or with renv inside your project:
+renv::install("zobaer09/zashboard")
+```
+
+## Quick start
+
+A minimal, practical example using built-in **mtcars** data. It builds **four targets**:
+**static HTML**, **Shiny app**, **Shinylive**, and a **Quarto** project.
+
+```r
+library(zashboard)
+
+# 1) Use the packaged example spec
+spec <- system.file("examples/mtcars/mtcars.yml", package = "zashboard", mustWork = TRUE)
+
+# 2) Build all targets (skip Quarto rendering by default for speed)
+out <- build_all(spec = spec, overwrite = TRUE, render_quarto = FALSE)
+out
+
+# 3) What you get:
+# - Static:     file.path(out$static_dir,    "index.html")
+# - Shinylive:  file.path(out$shinylive_dir, "index.html")  # + app.json
+# - Quarto:     file.path(out$quarto_dir,    c("_quarto.yml", "index.qmd"))
+# - Shiny app:  out$shiny_app   # a shiny.appobj (run via shiny::runApp(out$shiny_app))
+
+# Open the static dashboard in your browser
+browseURL(file.path(out$static_dir, "index.html"))
+```
+
+> **Tip:** To render the Quarto site locally, set `render_quarto = TRUE`,
+or run `quarto::quarto_render(out$quarto_dir)` after installing Quarto.
+
+## How people use Zashboard
+
+- **Static dashboards** for safe sharing (no server) with pre-aggregated data.
+- **Shiny apps** when you need cross-filtering and server compute.
+- **Shinylive** for running Shiny **entirely in the browser**.
+- **Quarto** to stitch dashboards, prose, and code into a site.
+
+See the articles: **Getting started** and **MTCars walkthrough**.
+
+## Demos
+
+Live examples built from base R datasets:
+
+- **Iris** — [Static](examples/iris/static/index.html) · [Shinylive](examples/iris/shinylive/index.html) · [Quarto](examples/iris/quarto/index.html)
+- **Airquality** — [Static](examples/airquality/static/index.html) · [Shinylive](examples/airquality/shinylive/index.html) · [Quarto](examples/airquality/quarto/index.html)
+- **ToothGrowth** — [Static](examples/toothgrowth/static/index.html) · [Shinylive](examples/toothgrowth/shinylive/index.html) · [Quarto](examples/toothgrowth/quarto/index.html)
+- **CO2** — [Static](examples/co2/static/index.html) · [Shinylive](examples/co2/shinylive/index.html) · [Quarto](examples/co2/quarto/index.html)
