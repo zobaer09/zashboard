@@ -28,9 +28,17 @@ jobs:
           extra-packages: any::pkgdown, local::.
           needs: website
 
-      - name: Build site (to docs/)
-        run: pkgdown::build_site_github_pages(new_process = FALSE, install = FALSE)
-        shell: Rscript {0}
+      # ---- new: start from a clean docs/ so pkgdown never aborts
+      - name: Clean docs dir (safe)
+        run: Rscript -e "if (dir.exists('docs')) unlink('docs', recursive = TRUE)"
+
+      - name: Build pkgdown site (to docs/)
+        run: Rscript -e "pkgdown::build_site_github_pages(new_process = FALSE, install = FALSE)"
+
+      # ---- new: copy the four demos into docs/examples/*
+      # (script skips Quarto variant if Quarto CLI isn't available)
+      - name: Publish example demos into docs/examples
+        run: Rscript scripts/examples_publish_all.R
 
       # REQUIRED for GitHub Pages (must come before the upload)
       - name: Setup Pages
