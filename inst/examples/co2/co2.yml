@@ -1,0 +1,38 @@
+title: "CO2 demo (built-in data)"
+
+datasets:
+  c2:
+    type: r_data
+    package: datasets
+    name: CO2
+
+charts:
+  - id: uptake_by_conc
+    title: Mean uptake by concentration
+    type: bar
+    dataset: c2
+    x: conc
+    "y": "mean(uptake)"
+
+  - id: uptake_scatter
+    title: Uptake vs conc (colored by Type)
+    type: scatter
+    dataset: c2
+    x: conc
+    "y": uptake
+
+  - id: n_rows
+    title: Observations
+    type: kpi
+    dataset: c2
+    metric: "n()"
+    fmt: "%.0f"
+
+layout:
+  rows:
+    - uptake_by_conc
+    - uptake_scatter
+    - n_rows
+
+theme:
+  bootswatch: cosmo

@@ -1,0 +1,38 @@
+title: 'ToothGrowth demo (built-in data)'
+
+datasets:
+  tg:
+    type: r_data
+    package: datasets
+    name: ToothGrowth
+
+charts:
+  - id: len_by_dose
+    title: Avg tooth length by dose
+    type: bar
+    dataset: tg
+    x: dose
+    'y': 'mean(len)'
+
+  - id: len_by_supp
+    title: Avg tooth length by supplement
+    type: bar
+    dataset: tg
+    x: supp
+    'y': 'mean(len)'
+
+  - id: n_rows
+    title: Observations
+    type: kpi
+    dataset: tg
+    metric: 'n()'
+    fmt: '%.0f'
+
+layout:
+  rows:
+    - len_by_dose
+    - len_by_supp
+    - n_rows
+
+theme:
+  bootswatch: cosmo

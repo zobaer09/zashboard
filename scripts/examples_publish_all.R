@@ -7,13 +7,48 @@ if (file.exists("renv/activate.R")) source("renv/activate.R")
 
 copy_dir_contents <- function(from_dir, dest_dir) {
   if (!dir.exists(from_dir)) stop("Source directory does not exist: ", from_dir)
+  
+  # clean destination and create root
   if (dir.exists(dest_dir)) unlink(dest_dir, recursive = TRUE, force = TRUE)
   dir.create(dest_dir, recursive = TRUE, showWarnings = FALSE)
-  files <- list.files(from_dir, full.names = TRUE, all.files = TRUE, no.. = TRUE)
-  ok <- file.copy(files, dest_dir, recursive = TRUE, overwrite = TRUE)
-  if (!all(ok)) stop("Failed to copy some files from ", from_dir, " to ", dest_dir)
+  
+  # Fast path if fs is available
+  if (requireNamespace("fs", quietly = TRUE)) {
+    fs::dir_copy(from_dir, dest_dir, overwrite = TRUE)
+    return(invisible(dest_dir))
+  }
+  
+  # Base R fallback: create all subdirs first, then copy files
+  root <- normalizePath(from_dir, winslash = "/", mustWork = TRUE)
+  paths <- list.files(root, recursive = TRUE, all.files = TRUE,
+                      full.names = TRUE, no.. = TRUE)
+  # split dirs vs files
+  dirs  <- paths[dir.exists(paths)]
+  files <- paths[!dir.exists(paths)]
+  
+  # helper to make relative paths
+  esc <- function(x) gsub("([.|()\\^{}+$*?]|\\[|\\])", "\\\\\\1", x)
+  rel  <- function(x) sub(paste0("^", esc(root), "/?"), "", normalizePath(x, winslash = "/"))
+  
+  # create directories (ensure parents exist)
+  rel_dirs <- rel(dirs)
+  rel_dirs <- rel_dirs[nzchar(rel_dirs)]
+  if (length(rel_dirs)) {
+    for (d in unique(rel_dirs)) dir.create(file.path(dest_dir, d), recursive = TRUE, showWarnings = FALSE)
+  }
+  
+  # copy files into place
+  rel_files <- rel(files)
+  ok <- if (length(files)) file.copy(from = files, to = file.path(dest_dir, rel_files),
+                                     overwrite = TRUE, copy.mode = TRUE) else logical()
+  if (length(files) && !all(ok)) {
+    bad <- paste(rel_files[!ok], collapse = ", ")
+    stop("Failed to copy some files from ", from_dir, " to ", dest_dir, ": ", bad)
+  }
+  
   invisible(dest_dir)
-} 
+}
+
 
 build_four <- function(spec_path, name) {
   base <- file.path(getwd(), "examples_out", name)

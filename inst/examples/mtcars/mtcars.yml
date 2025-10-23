@@ -1,0 +1,31 @@
+title: MTCars demo (built-in data)
+datasets:
+  cars:
+    type: r_data
+    package: datasets
+    name: mtcars
+charts:
+- id: mpg_by_cyl
+  title: Average MPG by cylinders
+  type: bar
+  dataset: cars
+  x: cyl
+  'y': mean(mpg)
+- id: hp_vs_mpg
+  title: Horsepower vs MPG
+  type: scatter
+  dataset: cars
+  x: hp
+  'y': mpg
+- id: mpg_avg
+  title: Average MPG
+  type: kpi
+  dataset: cars
+  metric: mean(mpg)
+  fmt: '%.1f'
+layout:
+  rows:
+  - mpg_by_cyl
+  - hp_vs_mpg
+theme:
+  bootswatch: cosmo
