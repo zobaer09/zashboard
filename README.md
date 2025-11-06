@@ -9,7 +9,7 @@
 
 
 [![R-CMD-check](https://github.com/zobaer09/zashboard/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/zobaer09/zashboard/actions/workflows/R-CMD-check.yaml)
-[![pkgdown](https://github.com/zobaer09/zashboard/actions/workflows/pkgdown.yaml/badge.svg)](https://zobaer09.github.io/zashboard/)
+[![pkgdown](https://img.shields.io/badge/docs-pkgdown-blue.svg)](https://zobaer09.github.io/zashboard/)
 
 Zashboard: define one dashboard spec, build **four** targets — static HTML, a Shiny app, a Shinylive app, and a Quarto site.
 
@@ -96,11 +96,8 @@ or run `quarto::quarto_render(out$quarto_dir)` after installing Quarto.
 
 See the articles: **Getting started** and **MTCars walkthrough**.
 
-## Demos
-
-Live examples built from base R datasets:
-
-- **Iris** — [Static](examples/iris/static/index.html) · [Shinylive](examples/iris/shinylive/index.html) · [Quarto](examples/iris/quarto/index.html)
-- **Airquality** — [Static](examples/airquality/static/index.html) · [Shinylive](examples/airquality/shinylive/index.html) · [Quarto](examples/airquality/quarto/index.html)
-- **ToothGrowth** — [Static](examples/toothgrowth/static/index.html) · [Shinylive](examples/toothgrowth/shinylive/index.html) · [Quarto](examples/toothgrowth/quarto/index.html)
-- **CO2** — [Static](examples/co2/static/index.html) · [Shinylive](examples/co2/shinylive/index.html) · [Quarto](examples/co2/quarto/index.html)
+### Demos
+- **Iris** — [Static](https://zobaer09.github.io/zashboard/examples/iris/static/index.html) · [Shinylive](https://zobaer09.github.io/zashboard/examples/iris/shinylive/index.html) · [Quarto](https://zobaer09.github.io/zashboard/examples/iris/quarto/index.html)
+- **Airquality** — [Static](https://zobaer09.github.io/zashboard/examples/airquality/static/index.html) · [Shinylive](https://zobaer09.github.io/zashboard/examples/airquality/shinylive/index.html) · [Quarto](https://zobaer09.github.io/zashboard/examples/airquality/quarto/index.html)
+- **ToothGrowth** — [Static](https://zobaer09.github.io/zashboard/examples/toothgrowth/static/index.html) · [Shinylive](https://zobaer09.github.io/zashboard/examples/toothgrowth/shinylive/index.html) · [Quarto](https://zobaer09.github.io/zashboard/examples/toothgrowth/quarto/index.html)
+- **CO2** — [Static](https://zobaer09.github.io/zashboard/examples/co2/static/index.html) · [Shinylive](https://zobaer09.github.io/zashboard/examples/co2/shinylive/index.html) · [Quarto](https://zobaer09.github.io/zashboard/examples/co2/quarto/index.html)

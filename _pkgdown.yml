@@ -1,34 +1,49 @@
 url: https://zobaer09.github.io/zashboard/
+
 template:
   bootstrap: 5
+
+quarto: false
+
+navbar:
+  left:
+    - text: Reference
+      href: reference/index.html
+    - text: Articles
+      menu:
+        - text: Getting started
+          href: articles/getting-started.html
+        - text: Examples
+          href: articles/examples.html
+    - text: Demos
+      href: examples/index.html
+
 reference:
-- title: Build targets
-  contents:
-  - build_all
-  - build_static
-  - build_shiny
-  - build_shinylive
-  - build_quarto
-- title: Spec & validation
-  contents:
-  - zashboard_read_spec
-  - zashboard_read_validate
-  - zashboard_validate_spec
-  - zashboard_spec
-- title: Manifest
-  contents:
-  - zashboard_as_manifest
-  - zashboard_validate_manifest
-  - zashboard_manifest
-- title: Data connectors
-  contents:
-  - zashboard_connect_duckdb
-  - zashboard_execute_sql
-  - zashboard_connect_arrow
-  - zashboard_execute_collect
-  - zashboard_disconnect
-  - zashboard_connect_mssql
-- title: Theming
-  contents: zashboard_theme
-- title: Scaffolding
-  contents: zashboard_init
+  - title: "Build targets"
+    contents: [build_all, build_static, build_shiny, build_shinylive, build_quarto]
+
+  - title: "Spec & validation"
+    contents: [zashboard_read_spec, zashboard_read_validate, zashboard_validate_spec, zashboard_spec]
+
+  - title: "Manifest"
+    contents: [zashboard_as_manifest, zashboard_validate_manifest, zashboard_manifest]
+
+  - title: "Data connectors"
+    contents: [zashboard_connect_duckdb, zashboard_execute_sql, zashboard_connect_arrow, zashboard_execute_collect, zashboard_disconnect, zashboard_connect_mssql]
+
+  - title: "Theming"
+    contents: [zashboard_theme]
+
+  - title: "Scaffolding"
+    contents: [zashboard_init]
+
+articles:
+  - title: "Getting started"
+    contents:
+      - getting-started
+      - mtcars-walkthrough
+      - recipes
+
+  - title: "Examples"
+    contents:
+      - examples
