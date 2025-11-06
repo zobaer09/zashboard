@@ -1,109 +1,74 @@
-#' Build a Shinylive site
+#' Build a minimal Shinylive bundle
 #'
-#' Produces a browser-executed Shiny app using Shinylive.
+#' Writes `index.html` and `app.json` suitable for browser-executed Shiny
+#' (Shinylive). This is a minimal stub used for tests and local demos.
 #'
-#' @param spec Path to a YAML file or a list already parsed; if NULL, the
-#'   packaged template is used.
-#' @param out_dir Output directory for the Shinylive bundle.
-#' @param overwrite Logical; if TRUE, allow writing into an existing out_dir.
-#' @param title Optional page title; defaults to spec$title or "Zashboard".
+#' @param spec Path to a YAML spec file, or a list already read in.
+#' @param out_dir Directory to write the bundle into. Defaults to
+#'   `file.path(tempdir(), "zashboard-shinylive")`.
+#' @param overwrite Logical; if `FALSE` (default) and `out_dir` exists, error.
+#' @param title Optional page title override; defaults to `spec$title` or "Zashboard (Shinylive)".
 #' @param ... Not used currently; reserved for future extensions.
-#' @return (Invisibly) the normalized output directory path.
+#' @return Invisibly, the normalized output directory path.
 #' @export
+#' @importFrom jsonlite write_json
 
-#' @examples
-#' \donttest{
-#' dir_out <- build_shinylive(overwrite = TRUE)
-#' file.exists(file.path(dir_out, "index.html"))
-#' file.exists(file.path(dir_out, "app.json"))
-#' }
-build_shinylive <- function(spec = NULL, out_dir = NULL, overwrite = FALSE, title = NULL, ...) {
-  `%||%` <- function(x, y) if (is.null(x) || length(x) == 0L) y else x
+build_shinylive <- function(spec = NULL,
+                            out_dir = file.path(tempdir(), "zashboard-shinylive"),
+                            overwrite = FALSE,
+                            title = NULL,
+                            ...) {
+  `%||%` <- function(a, b) if (is.null(a) || length(a) == 0) b else a
   
   sp <- zashboard_read_validate(spec)
+  page_title <- title %||% sp$title %||% "Zashboard (Shinylive)"
   
-  out_dir <- out_dir %||% file.path(tempdir(), "zashboard-shinylive")
   out_dir <- normalizePath(out_dir, winslash = "/", mustWork = FALSE)
-  
-  if (dir.exists(out_dir)) {
-    if (!isTRUE(overwrite)) {
-      stop("Output directory exists: '", out_dir, "'. Use overwrite = TRUE or choose a different out_dir.", call. = FALSE)
-    }
-  } else {
-    dir.create(out_dir, recursive = TRUE, showWarnings = FALSE)
+  if (dir.exists(out_dir) && !overwrite) {
+    stop("Output directory already exists: ", out_dir,
+         " (set overwrite = TRUE to replace).", call. = FALSE)
   }
+  if (dir.exists(out_dir) && overwrite) unlink(out_dir, recursive = TRUE, force = TRUE)
+  dir.create(out_dir, recursive = TRUE, showWarnings = FALSE)
   
-  title <- as.character(title %||% sp$title %||% "Zashboard")
+  # Minimal manifest with top-level `charts`
+  manifest <- list(
+    title    = page_title,
+    datasets = sp$datasets %||% list(),
+    charts   = sp$charts   %||% list()
+  )
   
-  # Small helpers --------------------------------------------------------------
-  write_utf8 <- function(path, text) {
-    con <- file(path, open = "wb", encoding = "UTF-8")
-    on.exit(close(con), add = TRUE)
-    writeLines(enc2utf8(text), con = con, useBytes = TRUE)
-  }
-  esc_html <- function(x) {
-    x <- as.character(x)
-    x <- gsub("&", "&amp;", x, fixed = TRUE)
-    x <- gsub("<", "&lt;",  x, fixed = TRUE)
-    x <- gsub(">", "&gt;",  x, fixed = TRUE)
+  # Write compact JSON where "charts":[ has no space (test expectation)
+  title_json    <- jsonlite::toJSON(manifest$title,    auto_unbox = TRUE)
+  datasets_json <- jsonlite::toJSON(manifest$datasets, auto_unbox = TRUE)
+  charts_json   <- jsonlite::toJSON(manifest$charts,   auto_unbox = TRUE)
+  
+  json_txt <- sprintf('{"title":%s,"datasets":%s,"charts":%s}',
+                      title_json, datasets_json, charts_json)
+  
+  writeLines(json_txt, file.path(out_dir, "app.json"))
+  
+  
+  # Minimal index.html
+  esc <- function(x) {
+    x <- as.character(x %||% "")
+    x <- gsub("&","&amp;",x,fixed=TRUE)
+    x <- gsub("<","&lt;" ,x,fixed=TRUE)
+    x <- gsub(">","&gt;" ,x,fixed=TRUE)
     x
   }
-  esc_json <- function(x) {
-    x <- as.character(x)
-    x <- gsub("\\\\", "\\\\\\\\", x)
-    x <- gsub('"', '\\"', x)
-    x
-  }
-  
-  # Build a tiny summary list for JSON
-  charts <- lapply(sp$charts %||% list(), function(ch) {
-    list(id = as.character(ch$id %||% ""), type = as.character(ch$type %||% ""))
-  })
-  
-  # index.html -----------------------------------------------------------------
-  index_html <- paste0(
-    "<!DOCTYPE html>",
-    "<html lang='en'><head><meta charset='utf-8'/>",
-    "<meta name='viewport' content='width=device-width,initial-scale=1'/>",
-    "<title>", esc_html(title), "</title>",
-    "<style>body{font-family:system-ui,Segoe UI,Roboto,Helvetica,Arial,sans-serif;margin:2rem;max-width:900px}",
-    "h1{margin-top:0}code{background:#f6f8fa;padding:.15rem .3rem;border-radius:4px}</style>",
+  lines <- c(
+    "<!doctype html>",
+    "<html><head>",
+    sprintf("<title>%s (Shinylive)</title>", esc(page_title)),
     "</head><body>",
-    "<h1>", esc_html(title), "</h1>",
-    "<p>This is a <em>placeholder</em> Shinylive build. In later tasks, we'll bundle WebAssembly ",
-    "and client code. For now, the <code>app.json</code> below summarizes charts.</p>",
-    "<p><strong>Charts:</strong></p>",
-    if (length(charts)) {
-      paste0("<ul>", paste0("<li>", esc_html(paste0(charts[[seq_along(charts)]]$id, " (", charts[[seq_along(charts)]]$type, ")")), "</li>", collapse = ""), "</ul>")
-    } else {
-      "<p>No charts defined.</p>"
-    },
-    "<hr/><p style='color:#666'>Generated by zashboard::build_shinylive() - v1 skeleton.</p>",
+    sprintf("<h1>%s (Shinylive)</h1>", esc(page_title)),
+    sprintf("<p><strong>Datasets:</strong> %d &nbsp; <strong>Charts:</strong> %d</p>",
+            length(sp$datasets %||% list()), length(sp$charts %||% list())),
+    "<p><small>Generated by <code>zashboard::build_shinylive()</code></small></p>",
     "</body></html>"
   )
-  write_utf8(file.path(out_dir, "index.html"), index_html)
-  
-  # app.json -------------------------------------------------------------------
-  # manual JSON to avoid adding dependencies
-  charts_json <- character(0)
-  if (length(charts)) {
-    charts_json <- paste0(
-      '[', paste0(
-        vapply(charts, function(ch) {
-          paste0('{"id":"',   esc_json(ch$id),   '","type":"', esc_json(ch$type), '"}')
-        }, character(1)), collapse = ","), ']'
-    )
-  } else {
-    charts_json <- '[]'
-  }
-  app_json <- paste0(
-    '{',
-    '"title":"', esc_json(title), '",',
-    '"version":1,',
-    '"charts":', charts_json,
-    '}'
-  )
-  write_utf8(file.path(out_dir, "app.json"), app_json)
+  writeLines(lines, file.path(out_dir, "index.html"))
   
   invisible(out_dir)
 }

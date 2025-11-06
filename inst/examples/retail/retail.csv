@@ -1,0 +1,11 @@
+date,category,region,sales
+2025-01-01,Electronics,East,1200
+2025-01-01,Home,East,800
+2025-01-02,Electronics,West,900
+2025-01-02,Home,West,500
+2025-01-03,Electronics,East,1400
+2025-01-03,Home,East,600
+2025-01-04,Electronics,West,1100
+2025-01-04,Home,West,700
+2025-01-05,Electronics,East,1500
+2025-01-05,Home,East,650

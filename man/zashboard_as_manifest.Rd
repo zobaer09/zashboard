@@ -2,18 +2,17 @@
 % Please edit documentation in R/manifest.R
 \name{zashboard_as_manifest}
 \alias{zashboard_as_manifest}
-\title{Construct a normalized manifest from a spec}
+\title{Convert a Zashboard spec to a manifest}
 \usage{
 zashboard_as_manifest(spec = NULL)
 }
 \arguments{
-\item{spec}{Character path to a YAML file, or a list. If \code{NULL}, the package
-template is used: \code{system.file("templates","zashboard.yml", package = "zashboard")}.}
+\item{spec}{Path to a YAML spec file \strong{or} a pre-parsed list with the same
+structure. If \code{NULL}, the package template spec is used.}
 }
 \value{
-A list with fields: \code{spec_version}, \code{datasets}, \code{charts}, \code{filters}, \code{layout}.
+A manifest list suitable for downstream build targets.
 }
 \description{
-Creates a small, predictable structure from a Zashboard spec with the
-minimum fields we care about in v1. This does not modify the spec on disk.
+Convert a Zashboard spec to a manifest
 }

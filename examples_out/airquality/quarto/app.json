@@ -1,0 +1,1 @@
+{"title":"Airquality demo (built-in data)","version":1,"charts":[{"id":"ozone_by_month","type":"bar"},{"id":"temp_vs_ozone","type":"scatter"},{"id":"n_rows","type":"kpi"}]}

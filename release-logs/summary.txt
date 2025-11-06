@@ -1,0 +1,5 @@
+FAST mode: FALSE
+Errors  : 0
+Warnings: 0
+Notes   : 2
+Rcheck dir: <unknown>

@@ -4,27 +4,33 @@
 \alias{build_static}
 \title{Build static HTML}
 \usage{
-build_static(spec = NULL, out_dir = NULL, overwrite = FALSE, title = NULL, ...)
+build_static(
+  spec,
+  out_dir = file.path(tempdir(), "zashboard-static"),
+  overwrite = TRUE,
+  title = NULL,
+  ...
+)
 
-build_static(spec = NULL, out_dir = NULL, overwrite = FALSE, title = NULL, ...)
+build_static(
+  spec,
+  out_dir = file.path(tempdir(), "zashboard-static"),
+  overwrite = TRUE,
+  title = NULL,
+  ...
+)
 }
 \arguments{
-\item{spec}{Path to a YAML file or a list already parsed; if NULL, the
-packaged template is used.}
+\item{spec}{Path to YAML spec (or spec list)}
 
-\item{out_dir}{Directory to write the site into. Defaults to
-file.path(tempdir(), "zashboard-static").}
+\item{out_dir}{Output directory}
 
-\item{overwrite}{Logical; if FALSE (default) and out_dir exists, error.}
+\item{overwrite}{Overwrite output directory if it exists}
 
-\item{title}{Optional page title override; defaults to spec$title or "Zashboard".}
-
-\item{...}{Not used currently; reserved for future extensions.}
-}
-\value{
-(Invisibly) the normalized output directory path.
+\item{title}{Optional page title override}
 }
 \description{
-Reads and validates a Zashboard spec, then writes a minimal index.html
-to the output directory and copies package assets (CSS/JS) if present.
+Build static HTML
+
+Build a static HTML dashboard from a spec
 }

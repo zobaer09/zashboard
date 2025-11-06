@@ -1,11 +1,9 @@
-checking CRAN incoming feasibility ... NOTE
+checking CRAN incoming feasibility ... [10s] NOTE
 Maintainer: 'Zobaer Ahmed <zobaer09@users.noreply.github.com>'
 
 New submission
 
 Version contains large components (0.0.0.9000)
-
-Package has a VignetteBuilder field but no prebuilt vignette index.
 
 The Description field should not start with the package name,
   'This package' or similar.

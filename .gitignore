@@ -18,7 +18,11 @@ Thumbs.db
 .idea/
 
 # pkgdown/site output (will add later)
-docs/
+!/docs
+!/docs/**
 site/
 .Rproj.user
-docs
+/doc/
+/Meta/
+inst/doc
+!inst/examples/**

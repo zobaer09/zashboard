@@ -1,12 +1,10 @@
-#' Read a Zashboard spec (YAML or list)
+#' Read and validate a Zashboard spec
 #'
-#' Loads a dashboard spec from a YAML file path or accepts a pre-parsed list.
-#' This is a safe loader: expressions are not evaluated; only data is read.
-#'
-#' @param spec Character path to a YAML file, or a list. If `NULL`, the package
-#'   template is used: `system.file("templates","zashboard.yml", package = "zashboard")`.
-#' @return A named list representing the spec.
+#' @param spec Path to a YAML spec file **or** a pre-parsed list with the same
+#'   structure. If `NULL`, the package template spec is used.
+#' @return A validated spec (list).
 #' @export
+
 zashboard_read_spec <- function(spec = NULL) {
   # Resolve default template path if spec is NULL
   if (is.null(spec)) {
@@ -101,12 +99,11 @@ zashboard_assert_spec <- function(spec, required) {
 
 #' Read and validate a Zashboard spec
 #'
-#' Convenience wrapper: reads a YAML/list spec via [zashboard_read_spec()],
-#' then validates it via [zashboard_validate_spec()]. Returns the validated spec.
-#'
-#' @inheritParams zashboard_read_spec
-#' @return The validated spec (list).
+#' @param spec Path to a YAML spec file **or** a pre-parsed list with the same
+#'   structure. If `NULL`, the package template spec is used.
+#' @return A validated spec (list).
 #' @export
+
 zashboard_read_validate <- function(spec = NULL) {
   sp <- zashboard_read_spec(spec)
   # quick top-level presence check before deeper validation

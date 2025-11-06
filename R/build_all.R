@@ -1,31 +1,49 @@
-#' Build all Zashboard targets at once
+#' Build all Zashboard targets
 #'
-#' Runs build_static(), build_shiny(), build_shinylive(), and build_quarto()
-#' and returns their outputs in a named list.
+#' Generates the static site, Shinylive bundle, and a Quarto project
+#' from a Zashboard spec.
 #'
-#' @param overwrite Logical; passed to the builders. Default TRUE.
-#' @param render_quarto Logical; if TRUE, try to render the Quarto site
-#'   (only when both the quarto R package and the Quarto CLI are available).
-#'   Default FALSE to keep CRAN and CI fast.
-#' @return A named list with elements described below.
-#' \describe{
-#'   \item{static_dir}{Path to the static HTML output directory.}
-#'   \item{shinylive_dir}{Path to the Shinylive output directory.}
-#'   \item{quarto_dir}{Path to the Quarto project directory.}
-#'   \item{shiny_app}{A shiny.appobj returned by build_shiny().}
-#' }
+#' @param spec Path to a YAML spec file **or** a pre-parsed list with the same
+#'   structure. If `NULL`, the package template spec is used.
+#' @param overwrite Logical; if `TRUE`, overwrite any existing output
+#'   directories. Default `FALSE`.
+#' @param render_quarto Logical; if `TRUE`, also render the Quarto project
+#'   after generating it. Default `FALSE` (recommended in CI).
+#' @param targets Character vector of targets to build. Valid values include
+#'   `"static"`, `"shinylive"`, and `"quarto"`. Use to build a subset
+#'   (e.g., `targets = c("static","quarto")`). If `NULL`, builds all.
+#' @param ... Reserved for future extensions; currently unused.
+#'
+#' @return Invisibly, a list with elements `static_dir`, `shinylive_dir`,
+#'   `quarto_dir`, and `shiny_app` (the last may be `NULL` when not built).
 #' @export
 
-build_all <- function(overwrite = TRUE, render_quarto = FALSE) {
-  static_dir    <- build_static(overwrite = overwrite)
-  shiny_app     <- build_shiny(launch = FALSE)
-  shinylive_dir <- build_shinylive(overwrite = overwrite)
-  quarto_dir    <- build_quarto(overwrite = overwrite, render = isTRUE(render_quarto))
+build_all <- function(
+    spec = NULL,
+    targets = c("static","shiny","shinylive","quarto"),
+    render_quarto = FALSE,
+    overwrite = FALSE,
+    ...
+) {
+  targets <- unique(match.arg(targets, several.ok = TRUE))
+  out <- list()
   
-  list(
-    static_dir    = static_dir,
-    shiny_app     = shiny_app,
-    shinylive_dir = shinylive_dir,
-    quarto_dir    = quarto_dir
-  )
+  if ("static" %in% targets) {
+    out$static_dir <- build_static(spec = spec, overwrite = overwrite, ...)
+  }
+  
+  if ("shiny" %in% targets) {
+    out$shiny_app <- build_shiny(spec = spec, ...)
+  }
+  
+  if ("shinylive" %in% targets) {
+    out$shinylive_dir <- build_shinylive(spec = spec, overwrite = overwrite, ...)
+  }
+  
+  if ("quarto" %in% targets) {
+    out$quarto_dir <- build_quarto(spec = spec, overwrite = overwrite, render_quarto = render_quarto, ...)
+  }
+  
+  invisible(out)
 }
+

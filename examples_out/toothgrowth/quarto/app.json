@@ -1,0 +1,1 @@
+{"title":"ToothGrowth demo (built-in data)","version":1,"charts":[{"id":"len_by_dose","type":"bar"},{"id":"len_by_supp","type":"bar"},{"id":"n_rows","type":"kpi"}]}

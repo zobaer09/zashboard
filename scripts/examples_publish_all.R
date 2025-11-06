@@ -1,31 +1,33 @@
 # scripts/examples_publish_all.R
-# Build & publish STATIC + SHINYLIVE + QUARTO into docs/examples/*/*
-# Works locally and in CI; avoids double-bracket vector indexing on lists.
+# Build & publish STATIC + SHINYLIVE + QUARTO to docs/examples/*/*
 
-if (file.exists("renv/activate.R")) source("renv/activate.R")
 
-`%||%` <- function(a, b) if (is.null(a) || length(a) == 0) b else a
-safe_len <- function(x) if (is.null(x)) 0L else length(x)
+# ---- helpers ---------------------------------------------------------------
 
+# Robust copy: copy directories first, then files.
 copy_dir_contents <- function(from_dir, dest_dir) {
   stopifnot(dir.exists(from_dir))
   if (dir.exists(dest_dir)) unlink(dest_dir, recursive = TRUE, force = TRUE)
   dir.create(dest_dir, recursive = TRUE, showWarnings = FALSE)
-  files <- list.files(from_dir, full.names = TRUE, all.files = TRUE, no.. = TRUE)
-  ok <- file.copy(files, dest_dir, recursive = TRUE, overwrite = TRUE)
-  if (!all(ok)) stop("Failed to copy some files from ", from_dir, " to ", dest_dir)
+  
+  items <- list.files(from_dir, full.names = TRUE, all.files = TRUE, no.. = TRUE)
+  dirs  <- items[dir.exists(items)]
+  files <- setdiff(items, dirs)
+  
+  # copy top-level directories first (brings along their nested structure)
+  if (length(dirs)) {
+    okd <- file.copy(dirs, dest_dir, recursive = TRUE, overwrite = TRUE)
+    if (!all(okd)) stop("Failed copying some directories from ", from_dir, " to ", dest_dir)
+  }
+  # then copy any top-level files
+  if (length(files)) {
+    okf <- file.copy(files, dest_dir, recursive = TRUE, overwrite = TRUE)
+    if (!all(okf)) stop("Failed copying some files from ", from_dir, " to ", dest_dir)
+  }
   invisible(dest_dir)
 }
 
-render_quarto_site <- function(quarto_dir) {
-  if (!nzchar(quarto::quarto_path())) {
-    message("Quarto CLI not available; skipping render for: ", quarto_dir)
-    return(invisible(NULL))
-  }
-  quarto::quarto_render(quarto_dir, quiet = TRUE)
-  file.path(quarto_dir, "_site")
-}
-
+# Build all 4 variants into examples_out/<name>/*
 build_four <- function(spec_path, name) {
   base <- file.path(getwd(), "examples_out", name)
   dir.create(base, recursive = TRUE, showWarnings = FALSE)
@@ -41,64 +43,90 @@ build_four <- function(spec_path, name) {
        shiny_app = shiny_app)
 }
 
-publish_one <- function(b, name) {
-  static_dest    <- file.path("docs", "examples", name, "static")
-  shinylive_dest <- file.path("docs", "examples", name, "shinylive")
-  quarto_dest    <- file.path("docs", "examples", name, "quarto")
+# Render Quarto and return its _site path (or NULL if not present)
+render_quarto_site <- function(quarto_dir) {
+  # Skip if Quarto CLI not available
+  if (!nzchar(Sys.which("quarto"))) return(NULL)
   
-  copy_dir_contents(b$static_dir, static_dest)
+  site <- file.path(quarto_dir, "_site")
   
-  if (!is.null(b$shinylive_dir) && dir.exists(b$shinylive_dir)) {
-    copy_dir_contents(b$shinylive_dir, shinylive_dest)
-  } else {
-    message("Shinylive not built for ", name, " (skipping).")
+  # If not already rendered (or incomplete), render synchronously
+  if (!file.exists(file.path(site, "index.html"))) {
+    try(quarto::quarto_render(quarto_dir, as_job = FALSE, quiet = TRUE), silent = TRUE)
   }
   
-  site <- render_quarto_site(b$quarto_dir)
-  if (!is.null(site) && dir.exists(site)) {
-    copy_dir_contents(site, quarto_dest)
-  }
-  
-  invisible(list(static = static_dest, shinylive = shinylive_dest, quarto = quarto_dest))
+  # Double-check: only return _site when index exists
+  if (file.exists(file.path(site, "index.html"))) site else NULL
 }
 
+
+# Publish one demo to docs/examples/<name>/*, only linking flavors that exist
+publish_one <- function(b, name) {
+  out_base <- file.path("docs", "examples", name)
+  dir.create(out_base, recursive = TRUE, showWarnings = FALSE)
+  
+  paths <- list()
+  
+  # Static
+  if (dir.exists(b$static_dir) && file.exists(file.path(b$static_dir, "index.html"))) {
+    copy_dir_contents(b$static_dir, file.path(out_base, "static"))
+    paths$static <- sprintf("examples/%s/static/index.html", name)
+  }
+  
+  # Shinylive
+  if (dir.exists(b$shinylive_dir) && file.exists(file.path(b$shinylive_dir, "index.html"))) {
+    copy_dir_contents(b$shinylive_dir, file.path(out_base, "shinylive"))
+    paths$shinylive <- sprintf("examples/%s/shinylive/index.html", name)
+  }
+  
+  # Quarto
+  site <- render_quarto_site(b$quarto_dir)
+  if (!is.null(site) && file.exists(file.path(site, "index.html"))) {
+    copy_dir_contents(site, file.path(out_base, "quarto"))
+    paths$quarto <- sprintf("examples/%s/quarto/index.html", name)
+  }
+  
+  invisible(paths)
+}
+
+# Write the landing page with ONLY flavors that exist
 write_examples_index <- function() {
-  # relative links and explicit index.html to avoid directory listing & 404s
-  dir.create(file.path("docs","examples"), recursive = TRUE, showWarnings = FALSE)
-  mk <- function(name, title) sprintf(
-    "<li>%s — <a href='./%s/static/index.html'>static</a> · <a href='./%s/shinylive/index.html'>shinylive</a> · <a href='./%s/quarto/index.html'>quarto</a></li>",
-    title, name, name, name
+  mk <- function(name, links) {
+    bits <- c(
+      if (!is.null(links$static))    sprintf("<a href='../%s'>static</a>",   links$static),
+      if (!is.null(links$shinylive)) sprintf("<a href='../%s'>shinylive</a>",links$shinylive),
+      if (!is.null(links$quarto))    sprintf("<a href='../%s'>quarto</a>",   links$quarto)
+    )
+    sprintf("<li>%s — %s</li>", name, paste(bits, collapse = " · "))
+  }
+  
+  # assemble rows
+  rows <- c(
+    mk("Iris",         publish_one(build_four("inst/examples/iris/iris.yml",               "iris"),         "iris")),
+    mk("Airquality",   publish_one(build_four("inst/examples/airquality/airquality.yml",   "airquality"),   "airquality")),
+    mk("ToothGrowth",  publish_one(build_four("inst/examples/toothgrowth/toothgrowth.yml", "toothgrowth"),  "toothgrowth")),
+    mk("CO2",          publish_one(build_four("inst/examples/co2/co2.yml",                 "co2"),          "co2"))
   )
+  
   html <- c(
     "<!doctype html><meta charset='utf-8'>",
-    "<body style='font-family:system-ui,Segoe UI,Arial;margin:24px'>",
+    "<body style='font-family:system-ui,Segoe UI,Arial;margin:24px;line-height:1.5'>",
     "<h1>Zashboard demos</h1>",
     "<p>Each demo is published in three flavors: static HTML, Shinylive (client-side Shiny), and Quarto.</p>",
     "<ul>",
-    mk("iris","Iris"),
-    mk("airquality","Airquality"),
-    mk("toothgrowth","ToothGrowth"),
-    mk("co2","CO2"),
+    rows,
     "</ul>",
     "<p>Generated by <code>scripts/examples_publish_all.R</code></p>",
     "</body>"
   )
+  
+  dir.create(file.path("docs","examples"), recursive = TRUE, showWarnings = FALSE)
   writeLines(html, file.path("docs","examples","index.html"))
-  # prevent GH Pages from trying to process this site with Jekyll
-  writeLines("", file.path("docs", ".nojekyll"))
+  invisible(TRUE)
 }
 
-# ---- Build & publish all four ------------------------------------------------
-b_iris <- build_four("inst/examples/iris/iris.yml",               "iris")
-b_air  <- build_four("inst/examples/airquality/airquality.yml",   "airquality")
-b_tg   <- build_four("inst/examples/toothgrowth/toothgrowth.yml", "toothgrowth")
-b_co2  <- build_four("inst/examples/co2/co2.yml",                 "co2")
-
-publish_one(b_iris, "iris")
-publish_one(b_air,  "airquality")
-publish_one(b_tg,   "toothgrowth")
-publish_one(b_co2,  "co2")
-
+if (file.exists("renv/activate.R")) source("renv/activate.R")
 write_examples_index()
-
+# keep .nojekyll to allow nested assets on GH Pages
+if (!file.exists(file.path("docs", ".nojekyll"))) writeLines("", file.path("docs", ".nojekyll"))
 message("All demos published under docs/examples/.")

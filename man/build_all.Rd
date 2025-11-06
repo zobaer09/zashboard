@@ -2,27 +2,37 @@
 % Please edit documentation in R/build_all.R
 \name{build_all}
 \alias{build_all}
-\title{Build all Zashboard targets at once}
+\title{Build all Zashboard targets}
 \usage{
-build_all(overwrite = TRUE, render_quarto = FALSE)
+build_all(
+  spec = NULL,
+  targets = c("static", "shiny", "shinylive", "quarto"),
+  render_quarto = FALSE,
+  overwrite = FALSE,
+  ...
+)
 }
 \arguments{
-\item{overwrite}{Logical; passed to the builders. Default TRUE.}
+\item{spec}{Path to a YAML spec file \strong{or} a pre-parsed list with the same
+structure. If \code{NULL}, the package template spec is used.}
 
-\item{render_quarto}{Logical; if TRUE, try to render the Quarto site
-(only when both the quarto R package and the Quarto CLI are available).
-Default FALSE to keep CRAN and CI fast.}
+\item{targets}{Character vector of targets to build. Valid values include
+\code{"static"}, \code{"shinylive"}, and \code{"quarto"}. Use to build a subset
+(e.g., \code{targets = c("static","quarto")}). If \code{NULL}, builds all.}
+
+\item{render_quarto}{Logical; if \code{TRUE}, also render the Quarto project
+after generating it. Default \code{FALSE} (recommended in CI).}
+
+\item{overwrite}{Logical; if \code{TRUE}, overwrite any existing output
+directories. Default \code{FALSE}.}
+
+\item{...}{Reserved for future extensions; currently unused.}
 }
 \value{
-A named list with elements described below.
-\describe{
-\item{static_dir}{Path to the static HTML output directory.}
-\item{shinylive_dir}{Path to the Shinylive output directory.}
-\item{quarto_dir}{Path to the Quarto project directory.}
-\item{shiny_app}{A shiny.appobj returned by build_shiny().}
-}
+Invisibly, a list with elements \code{static_dir}, \code{shinylive_dir},
+\code{quarto_dir}, and \code{shiny_app} (the last may be \code{NULL} when not built).
 }
 \description{
-Runs build_static(), build_shiny(), build_shinylive(), and build_quarto()
-and returns their outputs in a named list.
+Generates the static site, Shinylive bundle, and a Quarto project
+from a Zashboard spec.
 }

@@ -1,0 +1,84 @@
+---
+title: "Zashboard recipes"
+output:
+  rmarkdown::html_vignette:
+    df_print: paged
+vignette: >
+  %\VignetteIndexEntry{Zashboard recipes}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include=FALSE}
+knitr::opts_chunk$set(collapse = TRUE, comment = "#>")
+```
+
+This page shows **practical copy-paste patterns** using only built-in R data.
+
+> We keep long operations as `eval = FALSE` so vignettes remain CRAN-friendly.
+> Run the chunks interactively to see the outputs.
+
+## Recipe 1 — CSV → Static HTML
+
+Write `mtcars` to a CSV and point a minimal spec to it, then build **static HTML**.
+
+```{r eval=FALSE}
+library(zashboard)
+csv <- tempfile(fileext = ".csv")
+write.csv(mtcars, csv, row.names = FALSE)
+
+spec <- list(
+  title = "CSV → Static demo",
+  datasets = list(
+    cars = list(type = "csv", path = csv)
+  ),
+  charts = list(
+    list(id = "mpg_by_cyl", title = "Average MPG by cylinders",
+         type = "bar", dataset = "cars", x = "cyl", y = "mean(mpg)")
+  ),
+  layout = list(rows = c("mpg_by_cyl")),
+  theme = list(bootswatch = "cosmo")
+)
+
+out_dir <- zashboard::build_static(spec = spec, overwrite = TRUE)
+browseURL(file.path(out_dir, "index.html"))
+```
+
+## Recipe 2 — DuckDB → Shiny (query + app)
+
+```{r eval=FALSE}
+library(zashboard); library(DBI); library(duckdb)
+con <- DBI::dbConnect(duckdb::duckdb())
+on.exit(DBI::dbDisconnect(con, shutdown = TRUE), add = TRUE)
+DBI::dbWriteTable(con, "mtcars", mtcars, overwrite = TRUE)
+res <- zashboard::zashboard_execute_sql(list(type="duckdb", handle=con),
+  "SELECT cyl, AVG(mpg) AS avg_mpg FROM mtcars GROUP BY cyl ORDER BY cyl;")
+head(res)
+
+spec <- system.file("examples/mtcars/mtcars.yml", package="zashboard", mustWork=TRUE)
+app <- zashboard::build_shiny(spec = spec)
+# shiny::runApp(app)
+```
+
+## Recipe 3 — Parquet (Arrow) → Shinylive bundle
+
+```{r eval=FALSE}
+library(zashboard); library(arrow)
+pq <- file.path(tempdir(), "mtcars.parquet")
+arrow::write_parquet(mtcars, pq)
+dir <- zashboard::build_shinylive(overwrite = TRUE)
+list.files(dir)
+file.edit(file.path(dir, "app.json"))
+browseURL(file.path(dir, "index.html"))
+```
+
+## Bonus — Quarto site from one spec
+
+```{r eval=FALSE}
+library(zashboard)
+spec <- system.file("examples/mtcars/mtcars.yml", package="zashboard", mustWork=TRUE)
+qdir <- zashboard::build_quarto(spec = spec, overwrite = TRUE)
+list.files(qdir)
+# quarto::quarto_render(qdir)
+```
+

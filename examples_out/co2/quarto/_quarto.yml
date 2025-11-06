@@ -1,0 +1,10 @@
+project:
+  type: website
+  output-dir: _site
+website:
+  title: "CO2 demo (built-in data)"
+format:
+  html:
+    theme: cosmo
+    toc: true
+

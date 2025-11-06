@@ -2,18 +2,17 @@
 % Please edit documentation in R/manifest.R
 \name{zashboard_manifest}
 \alias{zashboard_manifest}
-\title{Read → manifest → validate}
+\title{Create a Zashboard manifest (convenience wrapper)}
 \usage{
 zashboard_manifest(spec = NULL)
 }
 \arguments{
-\item{spec}{Character path to a YAML file, or a list. If \code{NULL}, the package
-template is used: \code{system.file("templates","zashboard.yml", package = "zashboard")}.}
+\item{spec}{Path to a YAML spec file \strong{or} a pre-parsed list with the same
+structure. If \code{NULL}, the package template spec is used.}
 }
 \value{
-The validated manifest (list).
+A manifest list.
 }
 \description{
-Convenience wrapper that reads a spec, converts to a manifest, validates it,
-and returns the manifest.
+Create a Zashboard manifest (convenience wrapper)
 }

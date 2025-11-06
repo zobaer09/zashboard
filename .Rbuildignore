@@ -19,3 +19,24 @@
 ^zashboard-spec-starter\.zip$
 ^ci-logs$
 
+^doc$
+^Meta$
+^release-logs$
+
+^examples$
+^examples_out$
+^site$
+^_site$
+^docs$
+^\.quarto$
+
+^cran-comments\.md$
+
+^^ci-logs$$
+^^release-logs$$
+^^examples$$
+^^examples_out$$
+^^site$$
+^^docs$$
+^^cran-comments\\.md$$
+^^doc$$

@@ -1,0 +1,13 @@
+checking CRAN incoming feasibility ... NOTE
+Maintainer: 'Zobaer Ahmed <zobaer09@users.noreply.github.com>'
+
+New submission
+
+Version contains large components (0.0.0.9000)
+
+The Description field should not start with the package name,
+  'This package' or similar.
+
+checking for detritus in the temp directory ... NOTE
+Found the following files/directories:
+  'lastMiKTeXException'

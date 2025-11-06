@@ -6,7 +6,7 @@
 \usage{
 build_shinylive(
   spec = NULL,
-  out_dir = NULL,
+  out_dir = file.path(tempdir(), "zashboard-shinylive"),
   overwrite = FALSE,
   title = NULL,
   ...
@@ -14,34 +14,28 @@ build_shinylive(
 
 build_shinylive(
   spec = NULL,
-  out_dir = NULL,
+  out_dir = file.path(tempdir(), "zashboard-shinylive"),
   overwrite = FALSE,
   title = NULL,
   ...
 )
 }
 \arguments{
-\item{spec}{Path to a YAML file or a list already parsed; if NULL, the
-packaged template is used.}
+\item{spec}{Path to a YAML spec file, or a list already read in.}
 
-\item{out_dir}{Output directory for the Shinylive bundle.}
+\item{out_dir}{Directory to write the bundle into. Defaults to
+\code{file.path(tempdir(), "zashboard-shinylive")}.}
 
-\item{overwrite}{Logical; if TRUE, allow writing into an existing out_dir.}
+\item{overwrite}{Logical; if \code{FALSE} (default) and \code{out_dir} exists, error.}
 
-\item{title}{Optional page title; defaults to spec$title or "Zashboard".}
+\item{title}{Optional page title override; defaults to \code{spec$title} or "Zashboard (Shinylive)".}
 
 \item{...}{Not used currently; reserved for future extensions.}
 }
 \value{
-(Invisibly) the normalized output directory path.
+Invisibly, the normalized output directory path.
 }
 \description{
-Produces a browser-executed Shiny app using Shinylive.
-}
-\examples{
-\donttest{
-dir_out <- build_shinylive(overwrite = TRUE)
-file.exists(file.path(dir_out, "index.html"))
-file.exists(file.path(dir_out, "app.json"))
-}
+Writes \code{index.html} and \code{app.json} suitable for browser-executed Shiny
+(Shinylive). This is a minimal stub used for tests and local demos.
 }

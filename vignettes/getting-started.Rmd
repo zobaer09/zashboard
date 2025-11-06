@@ -1,0 +1,55 @@
+---
+title: "Zashboard: getting started"
+output:
+  rmarkdown::html_vignette:
+    df_print: paged
+vignette: >
+  %\VignetteIndexEntry{Zashboard: getting started}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include=FALSE}
+# Show code, but don't run heavy chunks during vignette builds.
+# If you really want to execute the examples locally:
+# Sys.setenv(ZASH_VIG_RUN = "1"); devtools::build_vignettes()
+run_examples <- identical(Sys.getenv("ZASH_VIG_RUN", "0"), "1")
+knitr::opts_chunk$set(collapse = TRUE, comment = "#>", eval = run_examples)
+```
+
+## What is Zashboard?
+
+One spec builds four targets: static HTML, Shiny app, Shinylive app, and a Quarto site.
+This vignette shows a minimal end-to-end flow using the template spec that ships with the package.
+
+## Build all targets (code only by default)
+
+library(zashboard)
+
+# Build without rendering Quarto (keeps CRAN/CI fast)
+
+res <- build_all(overwrite = TRUE, render_quarto = FALSE)
+res
+
+
+## You should now have:
+
+- res$static_dir/index.html
+
+- res$shinylive_dir/{index.html, app.json}
+
+- res$quarto_dir/{_quarto.yml, index.qmd}
+
+- res$shiny_app (a shiny.appobj you can run with shiny::runApp(res$shiny_app))
+
+## Next steps
+
+- Edit the spec file to add datasets and charts.
+
+- Use build_static() for safe static dashboards.
+
+- Use build_shiny() for cross-filtering and server-backed interactivity.
+
+- Use build_shinylive() for browser-executed Shiny.
+
+- Use build_quarto() to generate a Quarto project.

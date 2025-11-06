@@ -1,0 +1,55 @@
+---
+title: "MTCars walkthrough (4 targets)"
+output:
+  rmarkdown::html_vignette:
+    df_print: paged
+vignette: >
+  %\VignetteIndexEntry{MTCars walkthrough (4 targets)}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include=FALSE}
+knitr::opts_chunk$set(collapse = TRUE, comment = "#>")
+```
+
+This vignette shows how one Zashboard spec builds four targets: static HTML, a Shiny app, a Shinylive app, and a Quarto site - using only the built-in datasets::mtcars.
+
+```{r}
+library(zashboard)
+spec <- system.file("examples/mtcars/mtcars.yml", package = "zashboard", mustWork = TRUE)
+```
+
+## Static HTML
+
+```{r}
+static_dir <- zashboard::build_static(spec, overwrite = TRUE)
+static_dir
+```
+
+## Shinylive
+
+```{r}
+sl_dir <- zashboard::build_shinylive(spec, overwrite = TRUE)
+sl_dir
+```
+
+## Shiny app
+
+Run this part interactively.
+
+```{r eval=FALSE}
+# app <- zashboard::build_shiny(spec)
+# shiny::runApp(app)
+```
+
+## Quarto project
+
+```{r}
+qdir <- file.path(tempdir(), "zash-mtcars-quarto")
+zashboard::build_quarto(spec, out_dir = qdir, overwrite = TRUE)
+qdir
+```
+
+That is it - one spec, four targets.
+

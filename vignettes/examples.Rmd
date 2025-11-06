@@ -1,0 +1,15 @@
+---
+title: "Examples"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Examples}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+This page links to the hosted example dashboards built from simple Zashboard specs.
+
+- **Iris** — [static](https://zobaer09.github.io/zashboard/examples/iris/static/) · [shinylive](https://zobaer09.github.io/zashboard/examples/iris/shinylive/) · [quarto](https://zobaer09.github.io/zashboard/examples/iris/quarto/)
+- **Airquality** — [static](https://zobaer09.github.io/zashboard/examples/airquality/static/) · [shinylive](https://zobaer09.github.io/zashboard/examples/airquality/shinylive/) · [quarto](https://zobaer09.github.io/zashboard/examples/airquality/quarto/)
+- **ToothGrowth** — [static](https://zobaer09.github.io/zashboard/examples/toothgrowth/static/) · [shinylive](https://zobaer09.github.io/zashboard/examples/toothgrowth/shinylive/) · [quarto](https://zobaer09.github.io/zashboard/examples/toothgrowth/quarto/)
+- **CO2** — [static](https://zobaer09.github.io/zashboard/examples/co2/static/) · [shinylive](https://zobaer09.github.io/zashboard/examples/co2/shinylive/) · [quarto](https://zobaer09.github.io/zashboard/examples/co2/quarto/)

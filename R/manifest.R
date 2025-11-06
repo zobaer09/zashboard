@@ -1,11 +1,10 @@
-#' Construct a normalized manifest from a spec
+#' Convert a Zashboard spec to a manifest
 #'
-#' Creates a small, predictable structure from a Zashboard spec with the
-#' minimum fields we care about in v1. This does not modify the spec on disk.
-#'
-#' @inheritParams zashboard_read_spec
-#' @return A list with fields: `spec_version`, `datasets`, `charts`, `filters`, `layout`.
+#' @param spec Path to a YAML spec file **or** a pre-parsed list with the same
+#'   structure. If `NULL`, the package template spec is used.
+#' @return A manifest list suitable for downstream build targets.
 #' @export
+
 zashboard_as_manifest <- function(spec = NULL) {
   sp <- zashboard_read_validate(spec)
   
@@ -90,14 +89,13 @@ zashboard_validate_manifest <- function(manifest) {
   invisible(manifest)
 }
 
-#' Read → manifest → validate
+#' Create a Zashboard manifest (convenience wrapper)
 #'
-#' Convenience wrapper that reads a spec, converts to a manifest, validates it,
-#' and returns the manifest.
-#'
-#' @inheritParams zashboard_read_spec
-#' @return The validated manifest (list).
+#' @param spec Path to a YAML spec file **or** a pre-parsed list with the same
+#'   structure. If `NULL`, the package template spec is used.
+#' @return A manifest list.
 #' @export
+
 zashboard_manifest <- function(spec = NULL) {
   man <- zashboard_as_manifest(spec)
   zashboard_validate_manifest(man)

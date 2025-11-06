@@ -1,0 +1,1 @@
+{"title":"CO2 demo (built-in data)","version":1,"charts":[{"id":"uptake_by_conc","type":"bar"},{"id":"uptake_scatter","type":"scatter"},{"id":"n_rows","type":"kpi"}]}
